@@ -9,12 +9,12 @@ using System.IO;
 using System.Threading;
 
 //using System.Windows.Forms;
-//using Excel = Microsoft.Office.Interop.Excel;
+using Excel = Microsoft.Office.Interop.Excel;
 
 //// Syncfusion.XlsIO.WinForms
-using Syncfusion.XlsIO;
+//using Syncfusion.XlsIO;
 //using System.IO;
-using System.Reflection;
+//using System.Reflection;
 
 
 namespace SheetsQuickstart
@@ -28,7 +28,64 @@ namespace SheetsQuickstart
 
         static void Main(string[] args)
         {
+            ///  ??  ///  Create Excel File Using C# Console Application //SRART//
+            //Enter message and filename for sample
+            string fileName, Sampletext;
+            Console.Write("Enter File Name :");
+            fileName = Console.ReadLine();
+            fileName = "FinancialAccountInfo";
 
+            Console.Write("Enter text :");
+            Sampletext = Console.ReadLine();
+
+            //Create Excel Application sample object
+            Excel.Application xlSamp = new Microsoft.Office.Interop.Excel.Application();
+
+            //Check if Excel is installed
+            if (xlSamp == null)
+            {
+                Console.WriteLine("Excel is not Insatalled");
+                Console.ReadKey();
+                return;
+            }
+
+            //Create a new excel book and sheet
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
+            object misValue = System.Reflection.Missing.Value;
+
+            //Then add a sample text into first cell
+            xlWorkBook = xlSamp.Workbooks.Add(misValue);
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+            xlWorkSheet.Cells[1, 2] = Sampletext;
+
+            //Save the opened excel book to custom location. Dont forget, you have to add to exist location and you cant add to directly C: root.
+            string location = @"\\shadowdc01\m$\Accounting\Dashboard Report\" + fileName + ".xls";
+            xlWorkBook.SaveAs(location, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            xlWorkBook.Close(true, misValue, misValue);
+            xlSamp.Quit();
+
+            //This is Importent for free memory and excel file.
+            //release Excel Object 
+            try
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(xlSamp);
+                xlSamp = null;
+            }
+            catch (Exception ex)
+            {
+                xlSamp = null;
+                Console.Write("Error " + ex.ToString());
+            }
+            finally
+            {
+                GC.Collect();
+            }
+
+            ///  ??  ///  Create Excel File Using C# Console Application //END//
+
+
+            /*
             ////** Syncfusion.XlsIO.WinForms
             //Create an instance of ExcelEngine
             using (ExcelEngine excelEngine = new ExcelEngine())
@@ -57,7 +114,7 @@ namespace SheetsQuickstart
                 IWorksheet worksheet = workbook.Worksheets[0];
 
                 //Adding text to a cell
-                worksheet.Range["A1"].Text = "Hello World 3";
+                worksheet.Range["A2"].Text = "Hello World 4";
 
                 //Saving the workbook to disk in XLSX format
                 workbook.SaveAs("Sample2.xlsx");
@@ -73,6 +130,7 @@ namespace SheetsQuickstart
 
 
             }
+            */
 
             UserCredential credential;
 
@@ -115,7 +173,7 @@ namespace SheetsQuickstart
                 Console.WriteLine("AccountsReceivable\tAccountsPayable\tWeeklyDeposits\tCashOnHand\tCreditLineBalance\tProductionHoursWorked");
                 foreach (var row in values)
                 {
-                    // Print columns A and E, which correspond to indices 0 and 4.
+                    // Print columns A and E, which correspond to indices 0 and 5.
                     Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", row[0], row[1], row[2], row[3], row[4], row[5]);
                 }
             }
