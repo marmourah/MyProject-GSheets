@@ -11,7 +11,7 @@ using System.Threading;
 //using System.Windows.Forms;
 //using Excel = Microsoft.Office.Interop.Excel;
 
-
+//// Syncfusion.XlsIO.WinForms
 using Syncfusion.XlsIO;
 //using System.IO;
 using System.Reflection;
@@ -29,6 +29,7 @@ namespace SheetsQuickstart
         static void Main(string[] args)
         {
 
+            ////** Syncfusion.XlsIO.WinForms
             //Create an instance of ExcelEngine
             using (ExcelEngine excelEngine = new ExcelEngine())
             {
@@ -42,47 +43,35 @@ namespace SheetsQuickstart
                 //Instantiate the spreadsheet creation engine
                 //using (ExcelEngine excelEngine = new ExcelEngine())
                 //{
-                    //Instantiate the Excel application object
-                    IApplication application = excelEngine.Excel;
+                //Instantiate the Excel application object
+                IApplication application = excelEngine.Excel;
 
-                    //Assigns default application version
-                    application.DefaultVersion = ExcelVersion.Excel2013;
+                //Assigns default application version
+                application.DefaultVersion = ExcelVersion.Excel2013;
 
-                    //A new workbook is created equivalent to creating a new workbook in Excel
-                    //Create a workbook with 1 worksheet
-                    IWorkbook workbook = application.Workbooks.Create(1);
+                //A new workbook is created equivalent to creating a new workbook in Excel
+                //Create a workbook with 1 worksheet
+                IWorkbook workbook = application.Workbooks.Create(1);
 
-                    //Access first worksheet from the workbook
-                    IWorksheet worksheet = workbook.Worksheets[0];
+                //Access first worksheet from the workbook
+                IWorksheet worksheet = workbook.Worksheets[0];
 
-                    //Adding text to a cell
-                    worksheet.Range["A1"].Text = "Hello World 2";
+                //Adding text to a cell
+                worksheet.Range["A1"].Text = "Hello World 3";
 
-                    //Saving the workbook to disk in XLSX format
-                    workbook.SaveAs("Sample.xlsx");
+                //Saving the workbook to disk in XLSX format
+                workbook.SaveAs("Sample2.xlsx");
 
-                    //Closing the workbook
-                    workbook.Close();
+                //Closing the workbook
+                workbook.Close();
 
-                    //Dispose the Excel engine
-                    excelEngine.Dispose();
+                //Dispose the Excel engine
+                excelEngine.Dispose();
                 //}
-                
+             
                 ///  ??  ///  Creating a Hello World sample //END//
 
-                //Open existing workbook with data entered
-                Assembly assembly = typeof(Program).GetTypeInfo().Assembly;
-                Stream fileStream = assembly.GetManifestResourceStream("MyProject-GSheets.Sample.xlsx");
-                ///IWorkbook workbook = application.Workbooks.Open(fileStream);
 
-                //Access first worksheet from the workbook instance
-                ///IWorksheet worksheet = workbook.Worksheets[0];
-
-                //Insert sample text into cell “A1”
-                worksheet.Range["A1"].Text = "Syncfusion Essential XlsIO";
-
-                //Save the workbook to disk in xlsx format
-                workbook.SaveAs("C:\\Users\\Mary\\Documents\\SW M Data\\Output.xlsx");
             }
 
             UserCredential credential;
@@ -139,7 +128,7 @@ namespace SheetsQuickstart
     }
 }
 
-/////asdfasdf hello
+
 // Google Sheets -> API v4 https://developers.google.com/sheets/api/quickstart/dotnet
 // Create Excel File Using C# Console Application https://www.csharp-console-examples.com/general/create-excel-file-using-c-console-application/
-// write data to an existing Excel file https://www.syncfusion.com/kb/9107/how-to-write-data-to-an-existing-excel-file-in-c-vb-net
+// write data to an existing Excel file https://www.syncfusion.com/kb/9107/how-to-write-data-to-an-existing-excel-file-in-c-vb-net // Syncfusion.XlsIO.WinForms //paid
