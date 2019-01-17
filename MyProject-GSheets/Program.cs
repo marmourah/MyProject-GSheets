@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
+using Excel = Microsoft.Office.Interop.Excel;
+
 namespace SheetsQuickstart
 {
     class Program
@@ -19,6 +21,59 @@ namespace SheetsQuickstart
 
         static void Main(string[] args)
         {
+            //??//Microsoft Excel Object Library
+              //Enter message and filename for sample
+            string fileName, Sampletext;
+            Console.Write("Enter File Name :");
+            fileName = Console.ReadLine();
+
+            Console.Write("Enter text :");
+            Sampletext = Console.ReadLine();
+            
+              //Create excel app object
+            Excel.Application xlSamp = new Microsoft.Office.Interop.Excel.Application();
+
+            //Check if Excel is installed
+            if (xlSamp == null)
+            {
+                Console.WriteLine("Excel is not Insatalled");
+                Console.ReadKey();
+                return;
+            }
+
+              //Create a new excel book and sheet
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
+            object misValue = System.Reflection.Missing.Value;
+
+              //Then add a sample text into first cell
+            xlWorkBook = xlSamp.Workbooks.Add(misValue);
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+            xlWorkSheet.Cells[1, 1] = Sampletext;
+
+              //Save the opened excel book to custom location. Dont forget, you have to add to exist location and you cant add to directly C: root.
+            string location = @"C:\Users\Mary\Documents\SW M Data\" + fileName + ".xls";
+            xlWorkBook.SaveAs(location, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            xlWorkBook.Close(true, misValue, misValue);
+            xlSamp.Quit();
+
+            //release Excel Object 
+            try
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(xlSamp);
+                xlSamp = null;
+            }
+            catch (Exception ex)
+            {
+                xlSamp = null;
+                Console.Write("Error " + ex.ToString());
+            }
+            finally
+            {
+                GC.Collect();
+            }
+
+            //??//GOOGLE API
             UserCredential credential;
 
             using (var stream =
@@ -74,4 +129,4 @@ namespace SheetsQuickstart
 }
 
 // Google Sheets -> API v4 https://developers.google.com/sheets/api/quickstart/dotnet
-/////adfasdf helloe 
+// Create Excel File Using C# Console Application https://www.csharp-console-examples.com/general/create-excel-file-using-c-console-application/
