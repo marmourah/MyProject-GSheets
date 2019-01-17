@@ -8,7 +8,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-using Excel = Microsoft.Office.Interop.Excel;
+//using System.Windows.Forms;
+//using Excel = Microsoft.Office.Interop.Excel;
+
+
+using Syncfusion.XlsIO;
+//using System.IO;
+using System.Reflection;
+
 
 namespace SheetsQuickstart
 {
@@ -21,59 +28,63 @@ namespace SheetsQuickstart
 
         static void Main(string[] args)
         {
-            //??//Microsoft Excel Object Library
-              //Enter message and filename for sample
-            string fileName, Sampletext;
-            Console.Write("Enter File Name :");
-            fileName = Console.ReadLine();
 
-            Console.Write("Enter text :");
-            Sampletext = Console.ReadLine();
-            
-              //Create excel app object
-            Excel.Application xlSamp = new Microsoft.Office.Interop.Excel.Application();
-
-            //Check if Excel is installed
-            if (xlSamp == null)
+            //Create an instance of ExcelEngine
+            using (ExcelEngine excelEngine = new ExcelEngine())
             {
-                Console.WriteLine("Excel is not Insatalled");
-                Console.ReadKey();
-                return;
+
+                //Set the default application version as Excel 2016
+                //excelEngine.Excel.DefaultVersion = ExcelVersion.Excel2013;
+
+                ///  ??  ///  Creating a Hello World sample //SRART//
+
+                //New instance of ExcelEngine is created equivalent to launching Microsoft Excel with no workbooks open
+                //Instantiate the spreadsheet creation engine
+                //using (ExcelEngine excelEngine = new ExcelEngine())
+                //{
+                    //Instantiate the Excel application object
+                    IApplication application = excelEngine.Excel;
+
+                    //Assigns default application version
+                    application.DefaultVersion = ExcelVersion.Excel2013;
+
+                    //A new workbook is created equivalent to creating a new workbook in Excel
+                    //Create a workbook with 1 worksheet
+                    IWorkbook workbook = application.Workbooks.Create(1);
+
+                    //Access first worksheet from the workbook
+                    IWorksheet worksheet = workbook.Worksheets[0];
+
+                    //Adding text to a cell
+                    worksheet.Range["A1"].Text = "Hello World 2";
+
+                    //Saving the workbook to disk in XLSX format
+                    workbook.SaveAs("Sample.xlsx");
+
+                    //Closing the workbook
+                    workbook.Close();
+
+                    //Dispose the Excel engine
+                    excelEngine.Dispose();
+                //}
+                
+                ///  ??  ///  Creating a Hello World sample //END//
+
+                //Open existing workbook with data entered
+                Assembly assembly = typeof(Program).GetTypeInfo().Assembly;
+                Stream fileStream = assembly.GetManifestResourceStream("MyProject-GSheets.Sample.xlsx");
+                ///IWorkbook workbook = application.Workbooks.Open(fileStream);
+
+                //Access first worksheet from the workbook instance
+                ///IWorksheet worksheet = workbook.Worksheets[0];
+
+                //Insert sample text into cell “A1”
+                worksheet.Range["A1"].Text = "Syncfusion Essential XlsIO";
+
+                //Save the workbook to disk in xlsx format
+                workbook.SaveAs("C:\\Users\\Mary\\Documents\\SW M Data\\Output.xlsx");
             }
 
-              //Create a new excel book and sheet
-            Excel.Workbook xlWorkBook;
-            Excel.Worksheet xlWorkSheet;
-            object misValue = System.Reflection.Missing.Value;
-
-              //Then add a sample text into first cell
-            xlWorkBook = xlSamp.Workbooks.Add(misValue);
-            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-            xlWorkSheet.Cells[1, 1] = Sampletext;
-
-              //Save the opened excel book to custom location. Dont forget, you have to add to exist location and you cant add to directly C: root.
-            string location = @"C:\Users\Mary\Documents\SW M Data\" + fileName + ".xls";
-            xlWorkBook.SaveAs(location, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-            xlWorkBook.Close(true, misValue, misValue);
-            xlSamp.Quit();
-
-            //release Excel Object 
-            try
-            {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(xlSamp);
-                xlSamp = null;
-            }
-            catch (Exception ex)
-            {
-                xlSamp = null;
-                Console.Write("Error " + ex.ToString());
-            }
-            finally
-            {
-                GC.Collect();
-            }
-
-            //??//GOOGLE API
             UserCredential credential;
 
             using (var stream =
@@ -128,5 +139,7 @@ namespace SheetsQuickstart
     }
 }
 
+/////asdfasdf hello
 // Google Sheets -> API v4 https://developers.google.com/sheets/api/quickstart/dotnet
 // Create Excel File Using C# Console Application https://www.csharp-console-examples.com/general/create-excel-file-using-c-console-application/
+// write data to an existing Excel file https://www.syncfusion.com/kb/9107/how-to-write-data-to-an-existing-excel-file-in-c-vb-net
